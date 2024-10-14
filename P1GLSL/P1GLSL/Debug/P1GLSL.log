@@ -1,11 +1,11 @@
 ﻿cl : línea de comandos  warning D9035: La opción 'Gm' está desusada y se quitará en próximas versiones
   main.cpp
-C:\Users\rober\OneDrive\Escritorio\dest_IG\P1GLSL\P1GLSL\scr\main.cpp(55,14): warning C4305: '=': truncamiento de 'double' a 'T'
+C:\Users\rober\OneDrive\Escritorio\dest_IG\P1GLSL\P1GLSL\scr\main.cpp(61,14): warning C4305: '=': truncamiento de 'double' a 'T'
           with
           [
               T=float
           ]
-C:\Users\rober\OneDrive\Escritorio\dest_IG\P1GLSL\P1GLSL\scr\main.cpp(56,14): warning C4305: '=': truncamiento de 'double' a 'T'
+C:\Users\rober\OneDrive\Escritorio\dest_IG\P1GLSL\P1GLSL\scr\main.cpp(62,14): warning C4305: '=': truncamiento de 'double' a 'T'
           with
           [
               T=float
