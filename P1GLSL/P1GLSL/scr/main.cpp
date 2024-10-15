@@ -132,9 +132,6 @@ glm::mat4 createRotationMatrix(char axis, float angle)
 		rot[1][1] = cosAngle;  // m[1][1]
 		break;
 
-	default:
-		cout << "Eje no válido. Debe ser 'X', 'Y' o 'Z'.\n";
-		break;
 	}
 
 	return rot;
