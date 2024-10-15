@@ -26,6 +26,8 @@
     <None Include="..\shaders_P1\shader.v2.frag" />
     <None Include="..\shaders_P1\shader.v3.frag" />
     <None Include="..\shaders_P1\shader.v3.vert" />
+    <None Include="..\shaders_P1\shader.v7.frag" />
+    <None Include="..\shaders_P1\shader.v7.vert" />
     <None Include="..\shaders_P1\shader_allvariables.frag" />
     <None Include="..\shaders_P1\shader_allvariables.vert" />
   </ItemGroup>
