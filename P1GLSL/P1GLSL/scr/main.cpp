@@ -1,4 +1,4 @@
-#include "BOX.h"
+Ôªø#include "BOX.h"
 #include <IGL/IGlib.h>
 
 #define GLM_FORCE_RADIANS
@@ -12,9 +12,9 @@ using namespace glm;
 
 //Idenficadores de los objetos de la escena
 int objId =-1;
-// aÒadimos un segundo cubo
+// a√±adimos un segundo cubo
 int obj2Id = -1;
-// aÒadimos un tercer cubo para bezier
+// a√±adimos un tercer cubo para bezier
 int obj3Id = -1;
 
 //vectores de la camara
@@ -32,7 +32,7 @@ float verticalAngle = 0.0f;
 int lastMouseX = -1, lastMouseY = -1;
 
 
-//DeclaraciÛn de CB
+//Declaraci√≥n de CB
 void resizeFunc(int width, int height);
 void idleFunc();
 void keyboardFunc(unsigned char key, int x, int y);
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 	if (!init("../shaders_P1/shader.v7.vert", "../shaders_P1/shader.p1.frag"))
 		return -1;
    
-	//Se ajusta la c·mara
+	//Se ajusta la c√°mara
 	//Si no se da valor se cojen valores por defecto
 	
 	float n = 1.;
@@ -83,7 +83,7 @@ int main(int argc, char** argv)
 	
 	setModelMat(obj2Id, model2Mat);
 	
-	//Incluir texturas aquÌ.
+	//Incluir texturas aqu√≠.
 	
 	addColorTex(objId, "../img/estrellas.png");
 
@@ -111,21 +111,21 @@ mat4 createRotationMatrix(char axis, float angle)
 
 	switch (axis)
 	{
-	case 'X':  // RotaciÛn en el eje X
+	case 'X':  // Rotaci√≥n en el eje X
 		rot[1][1] = cosAngle;  // m[1][1]
 		rot[1][2] = -sinAngle; // m[1][2]
 		rot[2][1] = sinAngle;  // m[2][1]
 		rot[2][2] = cosAngle;  // m[2][2]
 		break;
 
-	case 'Y':  // RotaciÛn en el eje Y
+	case 'Y':  // Rotaci√≥n en el eje Y
 		rot[0][0] = cosAngle;  // m[0][0]
 		rot[0][2] = sinAngle;  // m[0][2]
 		rot[2][0] = -sinAngle; // m[2][0]
 		rot[2][2] = cosAngle;  // m[2][2]
 		break;
 
-	case 'Z':  // RotaciÛn en el eje Z
+	case 'Z':  // Rotaci√≥n en el eje Z
 		rot[0][0] = cosAngle;  // m[0][0]
 		rot[0][1] = -sinAngle; // m[0][1]
 		rot[1][0] = sinAngle;  // m[1][0]
@@ -139,7 +139,7 @@ mat4 orbitalSpinAxis(char axis ,float angle) {
 	// Matriz identidad inicial
 	mat4 model = mat4(1.0f);
 
-	// Trasladamos el objeto a una distancia fija del origen (centro de la Ûrbita)
+	// Trasladamos el objeto a una distancia fija del origen (centro de la √≥rbita)
 	float orbitRadius = 3.0f;
 
 	// vector de desplazamiento con el radio de la orbita 
@@ -156,15 +156,17 @@ mat4 orbitalSpinAxis(char axis ,float angle) {
 mat4 createViewMatrix(vec3 CoP, vec3 LookAt, vec3 VUP) {
 	
 	// Direcciones , como en modelado geometrico
-	vec3 N = normalize(LookAt - CoP);  // Vector que apunta desde CoP hacia LookAt
-	vec3 V = normalize(cross(N, VUP));  // Eje derecha
-	vec3 U = normalize(cross(V, N));    // Eje arriba ajustado
+	vec3 N = normalize(CoP - LookAt);  // ‚àílookAt/|lookAt| , teniendo en cuenta la posibilidad de que la camara no este en el origen
 
-	// Matriz de rotaciÛn de la c·mara
+	vec3 Vaux = VUP - dot(VUP ,N)* N;  // VUP - (VUP ¬∑ N)N
+	vec3 V = normalize(Vaux);
+	vec3 U = normalize(cross(V, N));    // V x N
+
+	// Matriz de rotaci√≥n de la c√°mara
 	mat4 rotacion = mat4(1.0f);
-	rotacion[0] = vec4(V, 0.0f);  // Eje V como primera fila
-	rotacion[1] = vec4(U, 0.0f);  // Eje U como segunda fila
-	rotacion[2] = vec4(-N, 0.0f); // -N como tercera fila (c·mara mira en la direcciÛn -Z)
+	rotacion[0] = vec4(U, 0.0f);  // Eje U como primera fila
+	rotacion[1] = vec4(V, 0.0f);  // Eje V como segunda fila
+	rotacion[2] = vec4(-N, 0.0f); // -N como tercera fila (c√°mara mira en la direcci√≥n -Z)
 
 	
 	mat4 traslacion = mat4(1.0f);
@@ -173,16 +175,16 @@ mat4 createViewMatrix(vec3 CoP, vec3 LookAt, vec3 VUP) {
 	traslacion[2][3] = -COP.z;
 
 
-	// Multiplicamos rotaciÛn y traslaciÛn para obtener la matriz de vista
+	// Multiplicamos rotaci√≥n y traslaci√≥n para obtener la matriz de vista
 	return rotacion * traslacion;
 }
 
-mat4 createProjMatrix(int width , int height){
+mat4 createProjMatrix(int width , int height , float anguloEnGrados){
 
-	// Ajusta el aspect ratio al tamaÒo de la ventana
+	// Ajusta el aspect ratio al tama√±o de la ventana
 
 	float aspectRatio = (float)width / (float)height;
-	float fov = 1.0f;
+	float anguloApertura = anguloEnGrados * (pi<float>()/180); // RADIANES ,  usamos pi de glm
 
 
 	//Mismos calculos de la matriz de proyeccion , pero cambiamos las componentes [0][0] , [1][1] : adaptamos el calculo del ratio
@@ -192,8 +194,8 @@ mat4 createProjMatrix(int width , int height){
 
 	mat4 proj = mat4(0.0);
 
-	proj[0].x = 1.0f / (aspectRatio * tan(fov / 2.0f));
-	proj[1].y = 1.0f / tan(fov / 2.0f);
+	proj[0].x = 1.0f / (aspectRatio * tan(anguloApertura / 2.0f));
+	proj[1].y = 1.0f / tan(anguloApertura / 2.0f);
 	proj[2][2] = (f + n) / (n - f);
 	proj[2][3] = -1.f;
 	proj[3].z = 2.f * f * n / (n - f);
@@ -214,14 +216,14 @@ float clampValue(float x, float min, float max) {
 void resizeFunc(int width, int height)
 {
 	// usamos nuestro metodo para crear una matriz de proyeccion
-	setProjMat(createProjMatrix(width,height));
+	setProjMat(createProjMatrix(width,height ,45.0f));
 	
 }
 
 void idleFunc()
 {
 	static float angle = 0;
-	angle =(angle < 6.28318530718)? angle + 0.01f : 0.0f;
+	angle =(angle < pi<float>()*2)? angle + 0.01f : 0.0f;
 
 	// ESTE rot ES EL QUE VIMOS EN CLASE , NO ES ILEGAL
 	mat4 rot  = rotate(mat4(1.0f), angle, vec3(1.0f, 1.0f, 0.0f));
@@ -269,12 +271,12 @@ void keyboardFunc(unsigned char key, int x, int y)
 		break;
 
 	case 'q':
-		// Rotar c·mara hacia la izquierda en el eje Y
+		// Rotar c√°mara hacia la izquierda en el eje Y
 	{
-		// Generamos una matriz de rotaciÛn en el eje Y usando createRotationMatrix
+		// Generamos una matriz de rotaci√≥n en el eje Y usando createRotationMatrix
 		mat4 rotationMat = createRotationMatrix('Y', rotationSpeed);
 
-		// Actualizamos la posiciÛn de la c·mara COP respecto al punto de interÈs (LookAt)
+		// Actualizamos la posici√≥n de la c√°mara COP respecto al punto de inter√©s (LookAt)
 		vec3 direction = COP - LookAt;  
 		direction = vec3(rotationMat * vec4(direction, 0.0f));  
 
@@ -283,16 +285,16 @@ void keyboardFunc(unsigned char key, int x, int y)
 	break;
 
 	case 'e':
-		// Rotar c·mara hacia la derecha en el eje Y
+		// Rotar c√°mara hacia la derecha en el eje Y
 	{
-		// Generamos una matriz de rotaciÛn en el eje Y usando createRotationMatrix con ·ngulo negativo
+		// Generamos una matriz de rotaci√≥n en el eje Y usando createRotationMatrix con √°ngulo negativo
 		mat4 rotationMat = createRotationMatrix('Y', -rotationSpeed);
 
 	
 		vec3 direction = COP - LookAt;
 		direction = vec3(rotationMat * vec4(direction, 0.0f)); 
 
-		COP = LookAt + direction;  // Actualizamos la nueva posiciÛn de la c·mara
+		COP = LookAt + direction;  // Actualizamos la nueva posici√≥n de la c√°mara
 	}
 	break;
 	}
@@ -307,14 +309,14 @@ void mouseFunc(int button, int state, int x, int y)
 	if (button == 2) cout << "derecha" << endl;
 	
 
-	cout << "en la posiciÛn " << x << " " << y << endl << endl;
+	cout << "en la posici√≥n " << x << " " << y << endl << endl;
 }
 
 void mouseMotionFunc(int x, int y)
 {
 	if (lastMouseX == -1 || lastMouseY == -1)
 	{
-		// Inicializamos las posiciones del ratÛn si es la primera vez
+		// Inicializamos las posiciones del rat√≥n si es la primera vez
 		lastMouseX = x;
 		lastMouseY = y;
 		return;
@@ -328,26 +330,26 @@ void mouseMotionFunc(int x, int y)
 	horizontalAngle += deltaX * 0.005f;
 	verticalAngle += deltaY * 0.005f;
 
-	// Limitamos el ·ngulo vertical para no rotar m·s de 90 grados arriba o abajo
+	// Limitamos el √°ngulo vertical para no rotar m√°s de 90 grados arriba o abajo
 	verticalAngle = clampValue(verticalAngle, -1.5708f, 1.5708f);
 
-	// Calculamos la nueva direcciÛn de la c·mara
+	// Calculamos la nueva direcci√≥n de la c√°mara
 	vec3 direction = vec3(cos(verticalAngle) * sin(horizontalAngle), sin(verticalAngle), cos(verticalAngle) * cos(horizontalAngle));
 	direction.x = cos(verticalAngle) * sin(horizontalAngle);
 	direction.y = sin(verticalAngle);
 	direction.z = cos(verticalAngle) * cos(horizontalAngle);
 
-	// Calculamos la nueva posiciÛn "Right" y "Up" (para calcular la matriz de vista)
+	// Calculamos la nueva posici√≥n "Right" y "Up" (para calcular la matriz de vista)
 	vec3 right = vec3(sin(horizontalAngle - 1.5708f), 0, cos(horizontalAngle - 1.5708f));
 	vec3 up = cross(right, direction);
 
-	// Actualizamos el LookAt de la c·mara
+	// Actualizamos el LookAt de la c√°mara
 	LookAt = COP + direction;
 
 	// Finalmente, actualizamos la matriz de vista
 	updateViewMatrix();
 
-	// Actualizamos las posiciones previas del ratÛn
+	// Actualizamos las posiciones previas del rat√≥n
 	lastMouseX = x;
 	lastMouseY = y;
 }
